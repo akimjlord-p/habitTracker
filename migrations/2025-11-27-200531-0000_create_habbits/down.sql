@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS complitions;
+DROP TABLE IF EXISTS habbits;

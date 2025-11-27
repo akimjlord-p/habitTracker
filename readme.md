@@ -4,11 +4,16 @@
 
 ## Цель проекта
 
-Проект создавался для отработки взаимодействия с git; отработки Options, Result, HashMap и Vector в rust; изучения работы с sqlite на rust;
+Проект создавался для отработки взаимодействия с git; отработки Options, Result, HashMap и Vector в rust; изучения работы с sqlite на rust; изучения docker;
+Ключевые задачи:
+- Изучить работу Docker
+- Отработать Options, Result
+- Изучить работу с diesel
+- Отработать ведение проекта на github
 
 ## Используемые технологии
 
-Rust; База данных sqlite(1 варинат на rsqlite, 2 вариант на diesel)
+Rust; База данных sqlite на diesel
 
 ## Установка и запуск
 
