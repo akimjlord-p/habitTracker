@@ -1,6 +1,8 @@
 use chrono::{Local, NaiveDateTime};
+use serde::{Deserialize, Serialize};
 
 
+#[derive(Deserialize, Serialize)]
 pub struct Completion{
     pub completed_at: NaiveDateTime,
     pub note: Option<String>

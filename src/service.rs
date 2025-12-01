@@ -1,4 +1,4 @@
-mod analytics;
+pub mod analytics;
 mod completion;
-mod habit;
+pub mod habit;
 mod utils;

@@ -1,6 +1,10 @@
 use chrono::{NaiveDateTime, Local, Duration};
 use crate::service::completion::Completion;
+use serde::{Deserialize, Serialize};
 
+
+
+#[derive(Deserialize, Serialize)]
 pub struct Habit{
     name: String,
     description: Option<String>,
