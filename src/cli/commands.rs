@@ -1,11 +1,17 @@
-enum HabitPointer{
+pub enum HabitPointer{
     Name(String),
     Number(i64)
 }
 
+impl HabitPointer{
+    fn parse(arg: &str) -> Self{
+        arg.parse::<i64>().map(Self::Number).unwrap_or_else(|_| HabitPointer::Name(arg.to_string()))
+    }
+}
 
 
-enum Command {
+
+pub enum Command {
     New(Vec<String>),
     Complete(HabitPointer),
     Analytics(HabitPointer),
@@ -16,47 +22,30 @@ enum Command {
 
 
 impl Command {
-    fn parse(s: &str) -> Result<Self, String>{
+    pub fn parse(s: &str) -> Result<Self, String>{
         let words: Vec<&str> = s.split_ascii_whitespace().collect();
         if words.len() == 0{
             return Err("Void input".to_string())
         }
         match words[0] {
             "new" => {
-                if words.len() != 3 {
-                    return Err(format!("Expected 2 arguments, get {}", (words.len() - 1)).to_string())
-                }
+                check_n_args(&words, 3)?;
                 Ok(Command::New(vec![words[1].to_string(), words[2].to_string()]))
             }
             "complete" => {
-                if words.len() != 2 {
-                    return Err(format!("Expected 1 argument, get {}", (words.len() - 1)).to_string())
-                }
-                let habit: Result<i64, _> = words[1].parse();
-                match habit {
-                    Ok(habit_number)  => Ok(Command::Complete(HabitPointer::Number(habit_number))),
-                    Err(_) => Ok(Command::Complete(HabitPointer::Name((words[1].to_string()))))
-                }
+                check_n_args(&words, 2)?;
+                let habit = HabitPointer::parse(&words[1]);
+                Ok(Command::Complete(habit))
             },
             "delete" => {
-                if words.len() != 2 {
-                    return Err(format!("Expected 1 argument, get {}", (words.len() - 1)).to_string())
-                }
-                let habit: Result<i64, _> = words[1].parse();
-                match habit {
-                    Ok(habit_number)  => Ok(Command::Delete(HabitPointer::Number(habit_number))),
-                    Err(_) => Ok(Command::Delete(HabitPointer::Name(words[1].to_string())))
-                }
+                check_n_args(&words, 2)?;
+                let habit = HabitPointer::parse(&words[1]);
+                Ok(Command::Delete(habit))
             },
             "analytics" => {
-                if words.len() != 2 {
-                    return Err(format!("Expected 1 argument, get {}", (words.len() - 1)).to_string())
-                }
-                let habit: Result<i64, _> = words[1].parse();
-                match habit {
-                    Ok(habit_number)  => Ok(Command::Analytics(HabitPointer::Number(habit_number))),
-                    Err(_) => Ok(Command::Analytics(HabitPointer::Name(words[1].to_string())))
-                }
+                check_n_args(&words, 2)?;
+                let habit = HabitPointer::parse(&words[1]);
+                Ok(Command::Analytics(habit))
             },
             "list" => {
                 Ok(Command::List)
@@ -69,3 +58,11 @@ impl Command {
     }
 }
 
+fn check_n_args(words: &Vec<&str>, n: i64) -> Result<(), String> {
+    if words.len() != n as usize{
+        return Err(format!("Expected {} args, get {}", n-1, (words.len() - 1)).to_string())
+    }
+    else{
+        Ok(())
+    }
+}
