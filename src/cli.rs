@@ -1,2 +1,2 @@
 mod commands;
-mod handlers;
+pub mod handlers;

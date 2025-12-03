@@ -1,31 +1,25 @@
 use chrono::{NaiveDateTime, Local, Duration};
-use crate::service::completion::Completion;
+use super::completion::Completion;
 use serde::{Deserialize, Serialize};
-
+use super::utils::HabitData;
 
 
 #[derive(Deserialize, Serialize)]
 pub struct Habit{
-    name: String,
-    description: Option<String>,
+    pub name: String,
     pub completions: Vec<Completion>,
     pub created_at: NaiveDateTime,
-    archived_at: Option<NaiveDateTime>,
-    is_archived: bool,
     pub frequency: Duration
 }
 
 
 impl Habit{
-    pub fn new(name: String, description: Option<String>, frequency: Duration) -> Self{
+    pub fn new(habit_data: HabitData) -> Self{
         Self{
-            name,
-            description,
+            name: habit_data.name,
             completions: Vec::new(),
             created_at: Local::now().naive_local(),
-            archived_at: Option::None,
-            is_archived: false,
-            frequency
+            frequency: habit_data.frequency
         }
     }
 
@@ -33,15 +27,4 @@ impl Habit{
     pub fn complete(&mut self, note: Option<String>){
         self.completions.push(Completion::new(note));
     }
-
-    pub fn archive(&mut self){
-        self.is_archived = true;
-        self.archived_at = Some(Local::now().naive_local());
-    }
-
-    pub fn is_archived(self) -> bool{
-        self.is_archived
-    }
-
-
 }

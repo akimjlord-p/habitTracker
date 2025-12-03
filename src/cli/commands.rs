@@ -1,18 +1,7 @@
-pub enum HabitPointer{
-    Name(String),
-    Number(i64)
-}
-
-impl HabitPointer{
-    fn parse(arg: &str) -> Self{
-        arg.parse::<i64>().map(Self::Number).unwrap_or_else(|_| HabitPointer::Name(arg.to_string()))
-    }
-}
-
-
+use crate::service::utils::{HabitData, HabitPointer};
 
 pub enum Command {
-    New(Vec<String>),
+    New(HabitData),
     Complete(HabitPointer),
     Analytics(HabitPointer),
     Delete(HabitPointer),
@@ -30,7 +19,8 @@ impl Command {
         match words[0] {
             "new" => {
                 check_n_args(&words, 3)?;
-                Ok(Command::New(vec![words[1].to_string(), words[2].to_string()]))
+                let habit = HabitData::parse(words[1], words[2])?;
+                Ok(Command::New(habit))
             }
             "complete" => {
                 check_n_args(&words, 2)?;

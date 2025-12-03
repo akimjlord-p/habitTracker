@@ -15,11 +15,25 @@ pub fn num_of_completions(habit: &Habit, start: &NaiveDateTime, end: &NaiveDateT
 }
 
 
-pub fn percentage_of_completion_throughout(habit: &Habit) -> i64{
+pub fn percentage_of_completion_throughout(habit: &Habit) -> i64 {
     let start = habit.created_at;
     let end = Local::now().naive_local();
     let interval = end - start;
-    (num_of_completions(&habit, &start, &end) / (interval.num_seconds() / habit.frequency.num_seconds())) * 100
+
+    let interval_secs = interval.num_seconds();
+    let freq_secs = habit.frequency.num_seconds();
+
+    if interval_secs <= 0 || freq_secs <= 0 {
+        return 0;
+    }
+
+    let expected_count = interval_secs / freq_secs;
+    if expected_count == 0 {
+        return 0;
+    }
+
+    let completions = num_of_completions(habit, &start, &end) as i64;
+    (completions * 100 / expected_count).min(100)
 }
 
 

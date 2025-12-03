@@ -1,6 +1,8 @@
 mod service;
 mod cli;
 mod db;
-fn main() {
-    println!("Hello, world!");
+
+fn main(){
+    let mut app = cli::handlers::CLi::initiate();
+    app.run();
 }
